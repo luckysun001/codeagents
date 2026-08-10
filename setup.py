@@ -10,7 +10,7 @@ setup(
     description="A lightweight multi-agent framework for code",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/codeagents/codeagents",
+    url="https://github.com/luckysun001/codeagents",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 3 - Alpha",
