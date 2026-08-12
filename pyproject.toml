@@ -21,6 +21,8 @@ classifiers = [
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Topic :: Software Development :: Code Generators",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 dependencies = [
   "openai>=1.0.0",
@@ -45,6 +47,9 @@ anthropic = ["anthropic>=0.18.0"]
 
 [project.scripts]
 codeagents = "codeagents.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.black]
 line-length = 120

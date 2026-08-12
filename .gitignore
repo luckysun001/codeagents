@@ -39,8 +39,10 @@ htmlcov/
 .tox/
 .pytest_cache/
 
-# Memory Storage
-memory/
+# Memory Storage (仅忽略运行时产物，勿忽略同名源码包)
+memory/*.json
+memory/*.db
+memory/*.sqlite
 *.json
 
 # Logs
@@ -56,3 +58,8 @@ site/
 
 # WorkBuddy local data
 .workbuddy/
+
+# Secrets
+.env
+.env.*
+!.env.example
