@@ -4,7 +4,7 @@
 代码生成 · 代码审查 · 任务规划 · 多 Agent 编排
 
 [![CI](https://github.com/luckysun001/codeagents/actions/workflows/ci.yml/badge.svg)](https://github.com/luckysun001/codeagents/actions/workflows/ci.yml)
-![Python](https://img.shields.io/badge/python-3.9%20%7C%203.11%20%7C%203.12-blue)
+![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 > **状态：Alpha (v0.1.0)** — 核心框架可用：6 个 Agent 角色、19 个内置工具、
@@ -215,7 +215,7 @@ pytest tests/ -v
 
 ## 技术栈
 
-- Python 3.9+（CI 覆盖 3.9 / 3.11 / 3.12）
+- Python 3.11+（CI 覆盖 3.11 / 3.12）
 - openai >= 1.0.0（核心依赖）
 - anthropic >= 0.18.0（可选）
 - pytest / flake8 / mypy / black（开发依赖）
