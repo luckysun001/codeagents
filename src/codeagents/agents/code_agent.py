@@ -1,11 +1,13 @@
 """代码智能体实现"""
 from typing import List
+
 from ..core.agent import BaseAgent
-from ..core.schema import ToolCall, ToolResult, Role, MessageType
+from ..core.schema import ToolCall, ToolResult
 from ..models.llm import BaseLLM
+from .llm_tool_agent import LLMToolAgent
 
 
-class CodeAgent(BaseAgent):
+class CodeAgent(LLMToolAgent):
     """代码智能体：专注于代码生成、审查、调试等任务"""
 
     DEFAULT_SYSTEM_PROMPT = """你是一个专业的代码助手，擅长编写、审查、调试和优化代码。
@@ -36,56 +38,6 @@ class CodeAgent(BaseAgent):
         )
         self.llm = llm
         self._last_response = None
-
-    def think(self) -> str:
-        """思考：调用LLM决定下一步"""
-        messages = self.get_messages()
-        tools = self.tool_registry.to_openai_format()
-
-        if tools:
-            response = self.llm.chat_with_tools(messages, tools)
-        else:
-            response = self.llm.chat(messages)
-
-        self._last_response = response
-        return response["content"] or ""
-
-    def parse_tool_calls(self, thinking: str) -> List[ToolCall]:
-        """解析工具调用"""
-        if not self._last_response or not self._last_response.get("tool_calls"):
-            return []
-
-        tool_calls = []
-        for tc in self._last_response["tool_calls"]:
-            tool_calls.append(
-                ToolCall(
-                    id=tc["id"],
-                    name=tc["name"],
-                    arguments=tc["arguments"],
-                )
-            )
-        return tool_calls
-
-    def execute_tool_call(self, tool_call: ToolCall) -> ToolResult:
-        """执行工具"""
-        try:
-            result = self.tool_registry.execute(
-                tool_call.name,
-                tool_call.arguments,
-            )
-            return ToolResult(
-                tool_call_id=tool_call.id,
-                name=tool_call.name,
-                content=str(result),
-                is_error=False,
-            )
-        except Exception as e:
-            return ToolResult(
-                tool_call_id=tool_call.id,
-                name=tool_call.name,
-                content=f"Error: {str(e)}",
-                is_error=True,
-            )
 
 
 class PlanningAgent(BaseAgent):

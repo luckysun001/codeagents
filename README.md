@@ -7,15 +7,16 @@
 ![Python](https://img.shields.io/badge/python-3.9%20%7C%203.11%20%7C%203.12-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-> **状态：Alpha (v0.1.0)** — 核心框架可用（3 个 Agent、19 个内置工具、两种编排能力），
-> 通义千问 / 豆包等 provider 与 Architect / Debugger / Documenter 等角色仍在开发中。
+> **状态：Alpha (v0.1.0)** — 核心框架可用：6 个 Agent 角色、19 个内置工具、
+> 4 个 LLM provider（OpenAI 兼容 / Anthropic / 通义千问 / 豆包）、三种编排模式均已实现。
 
 ---
 
 ## 核心特性
 
 ### 多 Agent 协作
-- 3 个已实现的专业角色 Agent（CodeAgent / PlanningAgent / ReviewAgent）
+- 6 个已实现的专业角色 Agent：CodeAgent / PlanningAgent / ReviewAgent /
+  ArchitectAgent / DebuggerAgent / DocumenterAgent
 - Agent 之间通过消息总线异步通信
 - 支持顺序、并行、流水线三种编排模式
 
@@ -25,9 +26,18 @@
 - 支持自定义工具注册
 
 ### LLM 适配
-- 已实现 OpenAI（含兼容 API）和 Anthropic 两个 provider
-- 统一的 `get_llm()` 工厂接口
-- 通义千问、豆包等 provider 为 TODO
+- 4 个 provider：`openai`（含任何 OpenAI 兼容服务）、`anthropic`、
+  `qwen`（通义千问 DashScope）、`doubao`（豆包火山方舟）
+- 统一的 `get_llm()` 工厂接口，后两者复用 OpenAI 兼容协议，
+  只需配置对应的 API Key 环境变量即可（见下表）
+- function calling 与工具调用解析开箱可用
+
+| provider | `get_llm()` 名称 | 默认 Base URL | API Key 环境变量 |
+|---|---|---|---|
+| OpenAI | `openai` | —（官方） | `OPENAI_API_KEY` |
+| Anthropic | `anthropic` | —（官方） | `ANTHROPIC_API_KEY` |
+| 通义千问 | `qwen` / `dashscope` | `https://dashscope.aliyuncs.com/compatible-mode/v1` | `DASHSCOPE_API_KEY` |
+| 豆包 | `doubao` / `ark` | `https://ark.cn-beijing.volces.com/api/v3` | `ARK_API_KEY` |
 
 ### 记忆系统
 - 基于 JSON 文件的对话记忆和知识库存储
@@ -42,9 +52,12 @@
 | **CodeAgent** | 代码生成、功能实现、文件操作 | 已实现 |
 | **PlanningAgent** | 任务拆分、步骤规划 | 已实现 |
 | **ReviewAgent** | 代码审查、质量评估 | 已实现 |
-| Architect Agent | 架构设计、技术选型 | TODO |
-| Debugger Agent | Bug 定位、根因分析 | TODO |
-| Documenter Agent | 文档生成 | TODO |
+| **ArchitectAgent** | 架构设计、技术选型、方案取舍 | 已实现 |
+| **DebuggerAgent** | Bug 定位、根因分析、回归验证 | 已实现 |
+| **DocumenterAgent** | 文档生成与维护 | 已实现 |
+
+前三者之外，Architect / Debugger / Documenter 同样支持工具调用
+（都继承自 `LLMToolAgent`，注册了工具就自动走 function calling）。
 
 ---
 
@@ -64,7 +77,9 @@ codeagents/
 │   │   ├── agent.py          # BaseAgent 抽象基类
 │   │   └── schema.py         # 数据结构（Message, ToolCall, ToolResult 等）
 │   ├── agents/               # Agent 实现
-│   │   └── code_agent.py     # CodeAgent, PlanningAgent, ReviewAgent
+│   │   ├── llm_tool_agent.py     # LLMToolAgent：带工具调用的 LLM Agent 基类
+│   │   ├── code_agent.py         # CodeAgent, PlanningAgent, ReviewAgent
+│   │   └── specialized_agents.py # ArchitectAgent, DebuggerAgent, DocumenterAgent
 │   ├── orchestration/        # 编排层
 │   │   ├── orchestrator.py   # 任务编排器（顺序/并行/流水线）
 │   │   └── message_bus.py    # 消息总线（主题订阅/点对点/广播）
@@ -84,10 +99,12 @@ codeagents/
 │
 └── tests/                    # 单元测试
     ├── test_agent.py         # Agent 行为测试
+    ├── test_llm_providers.py # LLM provider 与工厂函数测试
     ├── test_memory.py        # 记忆系统测试
     ├── test_message_bus.py   # 消息总线测试
     ├── test_orchestrator.py  # 编排器测试
     ├── test_registry.py      # 工具注册表测试
+    ├── test_specialized_agents.py # Architect/Debugger/Documenter 测试
     └── test_tools.py         # 工具系统测试
 ```
 

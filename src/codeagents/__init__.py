@@ -9,6 +9,8 @@ from .core.agent import BaseAgent
 
 # 智能体
 from .agents.code_agent import CodeAgent, PlanningAgent, ReviewAgent
+from .agents.llm_tool_agent import LLMToolAgent
+from .agents.specialized_agents import ArchitectAgent, DebuggerAgent, DocumenterAgent
 
 # 记忆系统
 from .memory.memory import Memory
@@ -20,7 +22,15 @@ from .tools.code_tools import get_code_tools
 from .tools.git_tools import get_git_tools
 
 # 模型
-from .models.llm import BaseLLM, OpenAILLM, AnthropicLLM, get_llm
+from .models.llm import (
+    BaseLLM,
+    OpenAILLM,
+    OpenAICompatibleLLM,
+    AnthropicLLM,
+    QwenLLM,
+    DoubaoLLM,
+    get_llm,
+)
 
 # 编排
 from .orchestration.message_bus import MessageBus, SharedContext, MessagePriority
@@ -67,9 +77,13 @@ __all__ = [
     "AgentStatus",
     "BaseAgent",
     # 智能体
+    "LLMToolAgent",
     "CodeAgent",
     "PlanningAgent",
     "ReviewAgent",
+    "ArchitectAgent",
+    "DebuggerAgent",
+    "DocumenterAgent",
     # 记忆
     "Memory",
     # 工具
@@ -83,7 +97,10 @@ __all__ = [
     # 模型
     "BaseLLM",
     "OpenAILLM",
+    "OpenAICompatibleLLM",
     "AnthropicLLM",
+    "QwenLLM",
+    "DoubaoLLM",
     "get_llm",
     # 编排
     "MessageBus",
