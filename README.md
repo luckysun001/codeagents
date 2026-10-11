@@ -3,7 +3,12 @@
 **面向软件开发全流程的轻量级多智能体协作框架。**
 代码生成 · 代码审查 · 任务规划 · 多 Agent 编排
 
-> **状态：Alpha (v0.1.0)** — 核心框架可用，部分高级特性仍在开发中。
+[![CI](https://github.com/luckysun001/codeagents/actions/workflows/ci.yml/badge.svg)](https://github.com/luckysun001/codeagents/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/python-3.9%20%7C%203.11%20%7C%203.12-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+
+> **状态：Alpha (v0.1.0)** — 核心框架可用（3 个 Agent、19 个内置工具、两种编排能力），
+> 通义千问 / 豆包等 provider 与 Architect / Debugger / Documenter 等角色仍在开发中。
 
 ---
 
@@ -51,35 +56,38 @@ codeagents/
 ├── pyproject.toml            # 项目配置
 ├── README.md
 ├── LICENSE
-├── cli.py                    # CLI 入口 (codeagents 命令)
 │
-├── __init__.py               # 公开 API
-├── core/                     # 核心抽象
-│   ├── agent.py              # BaseAgent 抽象基类
-│   └── schema.py             # 数据结构（Message, ToolCall, ToolResult 等）
-├── agents/                   # Agent 实现
-│   └── code_agent.py         # CodeAgent, PlanningAgent, ReviewAgent
-├── orchestration/            # 编排层
-│   ├── orchestrator.py       # 任务编排器（顺序/并行/流水线）
-│   └── message_bus.py        # 消息总线（主题订阅/点对点/广播）
-├── memory/                   # 记忆系统
-│   └── memory.py             # JSON 文件记忆
-├── tools/                    # 工具集
-│   ├── registry.py           # 工具注册表（装饰器模式）
-│   ├── file_tools.py         # 文件操作工具（6 个）
-│   ├── code_tools.py         # 代码分析工具（5 个）
-│   └── git_tools.py          # Git 操作工具（8 个）
-├── models/                   # LLM 适配层
-│   └── llm.py                # OpenAILLM, AnthropicLLM, get_llm
-│
-├── examples/                 # 示例代码
-│   ├── 01_single_agent.py    # 单个 Agent 使用
-│   ├── 02_multi_agent.py     # 多 Agent 协作
-│   └── 03_custom_tools.py    # 自定义工具
+├── src/codeagents/           # 源码包（src-layout）
+│   ├── __init__.py           # 公开 API
+│   ├── cli.py                # CLI 入口 (codeagents 命令)
+│   ├── core/                 # 核心抽象
+│   │   ├── agent.py          # BaseAgent 抽象基类
+│   │   └── schema.py         # 数据结构（Message, ToolCall, ToolResult 等）
+│   ├── agents/               # Agent 实现
+│   │   └── code_agent.py     # CodeAgent, PlanningAgent, ReviewAgent
+│   ├── orchestration/        # 编排层
+│   │   ├── orchestrator.py   # 任务编排器（顺序/并行/流水线）
+│   │   └── message_bus.py    # 消息总线（主题订阅/点对点/广播）
+│   ├── memory/               # 记忆系统
+│   │   └── memory.py         # JSON 文件记忆
+│   ├── tools/                # 工具集（共 19 个）
+│   │   ├── registry.py       # 工具注册表（装饰器模式）
+│   │   ├── file_tools.py     # 文件操作（6 个）
+│   │   ├── code_tools.py     # 代码分析（5 个）
+│   │   └── git_tools.py      # Git 操作（8 个）
+│   ├── models/               # LLM 适配层
+│   │   └── llm.py            # OpenAILLM, AnthropicLLM, get_llm
+│   └── examples/             # 示例代码
+│       ├── 01_single_agent.py
+│       ├── 02_multi_agent.py
+│       └── 03_custom_tools.py
 │
 └── tests/                    # 单元测试
+    ├── test_agent.py         # Agent 行为测试
     ├── test_memory.py        # 记忆系统测试
     ├── test_message_bus.py   # 消息总线测试
+    ├── test_orchestrator.py  # 编排器测试
+    ├── test_registry.py      # 工具注册表测试
     └── test_tools.py         # 工具系统测试
 ```
 
@@ -174,9 +182,23 @@ pytest tests/ -v
 
 ---
 
+## 🔗 相关项目
+
+本仓库是「**通用代码 Agent 框架**」，不绑定具体行业。
+
+如果你关心「**Agent 在垂直行业（银行审计）里怎么落地**」，推荐作者的另一个开源项目：
+
+> ### 🏦 [银行审计多智能体平台（bank-audit-agents）](https://github.com/luckysun001/bank-audit-agents)
+> 5 个审计角色 Agent + 编排器 + 三种审计流水线；配套的
+> [audit-rag](https://github.com/luckysun001/audit-rag) 提供法规与合同的检索增强能力。
+
+想系统学习多智能体背后的原理，另见 [AI-Learning-Playground](https://github.com/luckysun001/AI-Learning-Playground)。
+
+---
+
 ## 技术栈
 
-- Python 3.9+
+- Python 3.9+（CI 覆盖 3.9 / 3.11 / 3.12）
 - openai >= 1.0.0（核心依赖）
 - anthropic >= 0.18.0（可选）
 - pytest / flake8 / mypy / black（开发依赖）
