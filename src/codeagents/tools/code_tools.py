@@ -1,9 +1,6 @@
 """代码执行工具"""
 import subprocess
-import tempfile
-import os
 import sys
-from typing import Dict, Any, Optional
 from ..tools.registry import tool, ToolRegistry
 
 

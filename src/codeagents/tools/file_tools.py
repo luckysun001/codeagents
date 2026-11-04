@@ -1,6 +1,5 @@
 """文件操作工具"""
 import os
-from typing import List, Dict, Any, Optional
 from ..tools.registry import tool, ToolRegistry
 
 

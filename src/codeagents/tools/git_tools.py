@@ -1,7 +1,5 @@
 """Git工具"""
 import subprocess
-import os
-from typing import Optional
 from ..tools.registry import tool, ToolRegistry
 
 
@@ -39,7 +37,7 @@ def git_log(cwd: str = ".", max_count: int = 20) -> str:
     """查看提交历史"""
     try:
         result = subprocess.run(
-            ["git", "log", f"--oneline", f"-n{max_count}"],
+            ["git", "log", "--oneline", f"-n{max_count}"],
             capture_output=True,
             text=True,
             cwd=cwd,

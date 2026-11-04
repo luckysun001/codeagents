@@ -1,7 +1,6 @@
 """
 示例2: 多智能体协作 - 代码审查工作流
 """
-import os
 from codeagents import (
     CodeAgent,
     PlanningAgent,

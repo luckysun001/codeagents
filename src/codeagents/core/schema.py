@@ -1,6 +1,6 @@
 """核心数据结构定义"""
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 from enum import Enum
 from datetime import datetime
 import uuid
