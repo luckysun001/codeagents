@@ -197,6 +197,16 @@ print(orchestrator.get_workflow_summary(result))
 pytest tests/ -v
 ```
 
+### 持续集成 (CI)
+
+所有改动都经过 GitHub Actions 自动验证（`.github/workflows/ci.yml`）：
+
+- **触发条件**：`push` 与 `pull_request` 均覆盖 `main` 与 `dev` 分支
+- **运行环境**：Ubuntu，Python 3.11 / 3.12 双版本矩阵（`fail-fast: false`）
+- **验证内容**：`pip install -e ".[dev]"` 后运行 `pytest`
+
+> **依赖说明**：本项目用 PEP 621 `pyproject.toml` 声明依赖（`requires-python >=3.11`），通过 `pip install -e ".[dev]"` 安装；当前未提交 lock 文件，依赖按 `pyproject.toml` 约束解析到兼容最新版。
+
 ---
 
 ## 🔗 相关项目
