@@ -63,3 +63,6 @@ site/
 .env
 .env.*
 !.env.example
+
+# Coverage reports
+coverage.xml
