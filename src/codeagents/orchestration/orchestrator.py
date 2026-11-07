@@ -1,24 +1,27 @@
 """多智能体调度器"""
-from typing import Any, Dict, List, Optional, Callable
-from dataclasses import dataclass, field
-from enum import Enum
-from datetime import datetime
 
-from .message_bus import MessageBus, SharedContext
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any, Callable, Dict, List, Optional
+
 from ..core.agent import BaseAgent
+from .message_bus import MessageBus, SharedContext
 
 
 class ExecutionMode(str, Enum):
     """执行模式"""
+
     SEQUENTIAL = "sequential"  # 顺序执行
-    PARALLEL = "parallel"      # 并行执行
-    PIPELINE = "pipeline"      # 流水线模式
+    PARALLEL = "parallel"  # 并行执行
+    PIPELINE = "pipeline"  # 流水线模式
     ROUND_ROBIN = "round_robin"  # 轮询
     HIERARCHICAL = "hierarchical"  # 层级模式
 
 
 class TaskStatus(str, Enum):
     """任务状态"""
+
     PENDING = "pending"
     ASSIGNED = "assigned"
     RUNNING = "running"
@@ -29,6 +32,7 @@ class TaskStatus(str, Enum):
 @dataclass
 class Task:
     """任务"""
+
     task_id: str
     description: str
     assigned_agent_id: Optional[str] = None
@@ -45,6 +49,7 @@ class Task:
 @dataclass
 class Workflow:
     """工作流"""
+
     workflow_id: str
     name: str
     tasks: List[Task] = field(default_factory=list)
@@ -98,10 +103,7 @@ class Orchestrator:
 
     def list_agents(self) -> List[Dict[str, str]]:
         """列出所有智能体"""
-        return [
-            {"id": a.agent_id, "name": a.name, "description": a.description}
-            for a in self.agents.values()
-        ]
+        return [{"id": a.agent_id, "name": a.name, "description": a.description} for a in self.agents.values()]
 
     def create_task(
         self,
@@ -173,9 +175,7 @@ class Orchestrator:
 
             # 检查依赖是否都完成
             deps_completed = all(
-                t.status == TaskStatus.COMPLETED
-                for t in workflow.tasks
-                if t.task_id in task.dependencies
+                t.status == TaskStatus.COMPLETED for t in workflow.tasks if t.task_id in task.dependencies
             )
             if deps_completed:
                 ready.append(task)

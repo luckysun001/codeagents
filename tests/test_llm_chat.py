@@ -4,10 +4,9 @@
 - OpenAI 兼容层：普通回复、带 tool_calls、坏 JSON、无 usage
 - Anthropic：通过注入假的 anthropic 模块覆盖 chat / chat_with_tools
 """
+
 import sys
 from unittest.mock import MagicMock
-
-import pytest
 
 from codeagents.models.llm import AnthropicLLM, OpenAILLM
 
@@ -52,9 +51,7 @@ def test_openai_chat_with_tools():
     tc.id = "call_1"
     llm = OpenAILLM(model="gpt-4o", api_key="k")
     llm._client = MagicMock()
-    llm._client.chat.completions.create.return_value = _openai_response(
-        content=None, tool_calls=[tc]
-    )
+    llm._client.chat.completions.create.return_value = _openai_response(content=None, tool_calls=[tc])
     out = llm.chat_with_tools(
         [{"role": "user", "content": "weather"}],
         [{"type": "function", "function": {"name": "get_weather"}}],
@@ -104,9 +101,7 @@ def test_anthropic_chat_mocked(monkeypatch):
         mp.setitem(sys.modules, "anthropic", fake_anthropic)
         llm = AnthropicLLM(model="claude-x", api_key="k")
     llm._client = fake_client
-    out = llm.chat(
-        [{"role": "system", "content": "sys"}, {"role": "user", "content": "hi"}]
-    )
+    out = llm.chat([{"role": "system", "content": "sys"}, {"role": "user", "content": "hi"}])
     assert out["content"] == "hi there"
     assert out["usage"]["input_tokens"] == 5
     assert out["tool_calls"] is None
@@ -118,9 +113,7 @@ def test_anthropic_chat_with_tools_mocked(monkeypatch):
     tool_block.id = "t1"
     tool_block.name = "f"
     tool_block.input = {"a": 1}
-    fake_anthropic, fake_client = _fake_anthropic_client(
-        text="ok", tool_blocks=[tool_block]
-    )
+    fake_anthropic, fake_client = _fake_anthropic_client(text="ok", tool_blocks=[tool_block])
     with monkeypatch.context() as mp:
         mp.setitem(sys.modules, "anthropic", fake_anthropic)
         llm = AnthropicLLM(model="claude-x", api_key="k")

@@ -1,17 +1,11 @@
 """智能体基类"""
+
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Optional, Callable
-from .schema import (
-    Message,
-    AgentContext,
-    AgentStatus,
-    Role,
-    MessageType,
-    ToolCall,
-    ToolResult,
-)
+from typing import Any, Callable, Dict, List, Optional
+
 from ..memory import Memory
 from ..tools import ToolRegistry
+from .schema import AgentContext, AgentStatus, Message, MessageType, Role, ToolCall, ToolResult
 
 
 class BaseAgent(ABC):
@@ -178,24 +172,28 @@ class BaseAgent(ABC):
         messages = []
         for msg in self.context.messages:
             if msg.type == MessageType.TOOL_RESULT:
-                messages.append({
-                    "role": "tool",
-                    "tool_call_id": msg.tool_result.tool_call_id,
-                    "content": msg.content,
-                })
+                messages.append(
+                    {
+                        "role": "tool",
+                        "tool_call_id": msg.tool_result.tool_call_id,
+                        "content": msg.content,
+                    }
+                )
             elif msg.tool_calls:
-                messages.append({
-                    "role": "assistant",
-                    "content": msg.content,
-                    "tool_calls": [
-                        {
-                            "id": tc.id,
-                            "type": "function",
-                            "function": {"name": tc.name, "arguments": tc.arguments},
-                        }
-                        for tc in msg.tool_calls
-                    ],
-                })
+                messages.append(
+                    {
+                        "role": "assistant",
+                        "content": msg.content,
+                        "tool_calls": [
+                            {
+                                "id": tc.id,
+                                "type": "function",
+                                "function": {"name": tc.name, "arguments": tc.arguments},
+                            }
+                            for tc in msg.tool_calls
+                        ],
+                    }
+                )
             else:
                 messages.append({"role": msg.role.value, "content": msg.content})
         return messages

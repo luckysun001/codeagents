@@ -2,11 +2,12 @@
 
 验证工具装饰器、注册、执行、OpenAI 格式转换、冲突处理。
 """
-import pytest
+
 import json
-from codeagents.tools.registry import (
-    Tool, ToolDefinition, ToolParameter, ToolRegistry, tool,
-)
+
+import pytest
+
+from codeagents.tools.registry import ToolDefinition, ToolRegistry, tool
 
 
 class TestToolDecorator:
@@ -93,10 +94,12 @@ class TestToolRegistry:
         registry = ToolRegistry()
 
         @tool(name="t1", category="a")
-        def t1(x: str): return x
+        def t1(x: str):
+            return x
 
         @tool(name="t2", category="b")
-        def t2(x: str): return x
+        def t2(x: str):
+            return x
 
         registry.register(t1)
         registry.register(t2)
@@ -108,13 +111,16 @@ class TestToolRegistry:
         registry = ToolRegistry()
 
         @tool(name="t1", category="file")
-        def t1(x: str): return x
+        def t1(x: str):
+            return x
 
         @tool(name="t2", category="git")
-        def t2(x: str): return x
+        def t2(x: str):
+            return x
 
         @tool(name="t3", category="file")
-        def t3(x: str): return x
+        def t3(x: str):
+            return x
 
         registry.register(t1)
         registry.register(t2)
@@ -236,10 +242,12 @@ class TestOpenAIFormat:
         registry = ToolRegistry()
 
         @tool(name="t1")
-        def t1(x: str): return x
+        def t1(x: str):
+            return x
 
         @tool(name="t2")
-        def t2(y: int): return y
+        def t2(y: int):
+            return y
 
         registry.register(t1)
         registry.register(t2)

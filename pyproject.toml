@@ -68,3 +68,17 @@ ignore_missing_imports = true
 testpaths = ["tests"]
 python_files = ["test_*.py"]
 addopts = ["-v"]
+
+[tool.isort]
+profile = "black"
+line_length = 120
+
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+
+[tool.ruff.lint]
+select = ["F"]
+ignore = ["F403"]

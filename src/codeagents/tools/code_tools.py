@@ -1,8 +1,10 @@
 """代码执行工具"""
+
 import shlex
 import subprocess
 import sys
-from ..tools.registry import tool, ToolRegistry
+
+from ..tools.registry import ToolRegistry, tool
 
 
 @tool(name="execute_python", description="执行Python代码", category="code")

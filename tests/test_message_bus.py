@@ -1,10 +1,6 @@
 """测试消息总线"""
-import pytest
-from codeagents.orchestration.message_bus import (
-    MessageBus,
-    SharedContext,
-    MessagePriority,
-)
+
+from codeagents.orchestration.message_bus import MessageBus, MessagePriority, SharedContext
 
 
 def test_message_bus_basic():

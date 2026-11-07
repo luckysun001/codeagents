@@ -1,13 +1,15 @@
 """核心数据结构定义"""
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
-from enum import Enum
-from datetime import datetime
+
 import uuid
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
 
 class Role(str, Enum):
     """消息角色"""
+
     SYSTEM = "system"
     USER = "user"
     ASSISTANT = "assistant"
@@ -16,6 +18,7 @@ class Role(str, Enum):
 
 class MessageType(str, Enum):
     """消息类型"""
+
     TEXT = "text"
     TOOL_CALL = "tool_call"
     TOOL_RESULT = "tool_result"
@@ -26,6 +29,7 @@ class MessageType(str, Enum):
 @dataclass
 class ToolCall:
     """工具调用"""
+
     id: str
     name: str
     arguments: Dict[str, Any]
@@ -34,6 +38,7 @@ class ToolCall:
 @dataclass
 class ToolResult:
     """工具执行结果"""
+
     tool_call_id: str
     name: str
     content: str
@@ -43,6 +48,7 @@ class ToolResult:
 @dataclass
 class Message:
     """消息数据结构"""
+
     role: Role
     content: str
     type: MessageType = MessageType.TEXT
@@ -65,6 +71,7 @@ class Message:
 
 class AgentStatus(str, Enum):
     """智能体状态"""
+
     IDLE = "idle"
     THINKING = "thinking"
     RUNNING_TOOL = "running_tool"
@@ -76,6 +83,7 @@ class AgentStatus(str, Enum):
 @dataclass
 class AgentContext:
     """智能体执行上下文"""
+
     agent_id: str
     task: str
     messages: List[Message] = field(default_factory=list)

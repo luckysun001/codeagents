@@ -1,6 +1,8 @@
 """Git工具"""
+
 import subprocess
-from ..tools.registry import tool, ToolRegistry
+
+from ..tools.registry import ToolRegistry, tool
 
 
 @tool(name="git_status", description="查看Git状态", category="git")

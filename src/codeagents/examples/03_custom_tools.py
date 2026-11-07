@@ -1,8 +1,10 @@
 """
 示例3: 自定义工具
 """
-from codeagents import tool, ToolRegistry, CodeAgent, get_llm
+
 import requests
+
+from codeagents import CodeAgent, ToolRegistry, get_llm, tool
 
 
 # 使用装饰器定义自定义工具

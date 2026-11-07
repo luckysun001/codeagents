@@ -3,16 +3,10 @@
 覆盖 OpenAI 兼容层（通义千问 / 豆包）的默认参数与工厂函数映射。
 不发起任何真实网络请求：openai SDK 构造客户端是纯本地行为。
 """
+
 import pytest
 
-from codeagents.models.llm import (
-    AnthropicLLM,
-    DoubaoLLM,
-    OpenAICompatibleLLM,
-    OpenAILLM,
-    QwenLLM,
-    get_llm,
-)
+from codeagents.models.llm import AnthropicLLM, DoubaoLLM, OpenAICompatibleLLM, OpenAILLM, QwenLLM, get_llm
 
 
 class TestOpenAICompatibleDefaults:

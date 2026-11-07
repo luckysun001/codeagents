@@ -3,6 +3,7 @@
 通过工具注册表执行，使用临时目录中的真实本地 git 仓库，不联网。
 依赖系统 PATH 中存在 git 可执行文件（CI 的 ubuntu-latest 与本地均满足）。
 """
+
 import os
 import subprocess
 import tempfile

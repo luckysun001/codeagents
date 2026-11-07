@@ -1,2 +1,2 @@
-from .schema import *
 from .agent import *
+from .schema import *

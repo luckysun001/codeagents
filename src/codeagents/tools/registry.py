@@ -1,13 +1,15 @@
 """工具注册与调用框架"""
-from typing import Any, Callable, Dict, List, Optional
-from dataclasses import dataclass, field
+
 import inspect
 import json
+from dataclasses import dataclass, field
+from typing import Any, Callable, Dict, List, Optional
 
 
 @dataclass
 class ToolParameter:
     """工具参数定义"""
+
     name: str
     type: str
     description: str
@@ -18,6 +20,7 @@ class ToolParameter:
 @dataclass
 class ToolDefinition:
     """工具定义"""
+
     name: str
     description: str
     parameters: List[ToolParameter] = field(default_factory=list)

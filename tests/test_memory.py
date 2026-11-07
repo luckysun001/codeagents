@@ -1,7 +1,7 @@
 """测试记忆系统"""
-import pytest
-import os
+
 import tempfile
+
 from codeagents.memory.memory import Memory
 
 
@@ -76,15 +76,21 @@ def test_conversation_search():
     """测试搜索对话"""
     memory = Memory()
 
-    memory.add_conversation("conv1", [
-        {"role": "user", "content": "How to write Python code?"},
-        {"role": "assistant", "content": "Let me help you with Python."},
-    ])
+    memory.add_conversation(
+        "conv1",
+        [
+            {"role": "user", "content": "How to write Python code?"},
+            {"role": "assistant", "content": "Let me help you with Python."},
+        ],
+    )
 
-    memory.add_conversation("conv2", [
-        {"role": "user", "content": "How to bake bread?"},
-        {"role": "assistant", "content": "Bread baking is easy."},
-    ])
+    memory.add_conversation(
+        "conv2",
+        [
+            {"role": "user", "content": "How to bake bread?"},
+            {"role": "assistant", "content": "Bread baking is easy."},
+        ],
+    )
 
     results = memory.search_conversations("Python")
     assert len(results) == 1

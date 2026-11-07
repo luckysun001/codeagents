@@ -2,14 +2,11 @@
 
 使用 Mock LLM 验证 think-act 循环、上下文管理、回调机制、步数限制等。
 """
+
 import pytest
-from unittest.mock import MagicMock, patch
+
 from codeagents.core.agent import BaseAgent
-from codeagents.core.schema import (
-    Message, Role, MessageType, ToolCall, ToolResult,
-    AgentContext, AgentStatus,
-)
-from codeagents.tools.registry import ToolRegistry, Tool, tool, ToolDefinition, ToolParameter
+from codeagents.core.schema import AgentContext, AgentStatus, Role, ToolCall, ToolResult
 
 
 class MockAgent(BaseAgent):
@@ -200,10 +197,7 @@ class TestRunFullLoop:
         assert ctx.status == AgentStatus.FINISHED
 
     def test_run_with_multiple_tool_calls(self):
-        calls = [
-            ToolCall(id=f"tc-{i}", name="step", arguments={})
-            for i in range(3)
-        ]
+        calls = [ToolCall(id=f"tc-{i}", name="step", arguments={}) for i in range(3)]
         agent = MockAgent(
             agent_id="test-11",
             name="TestAgent",

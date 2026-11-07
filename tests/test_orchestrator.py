@@ -2,15 +2,10 @@
 
 验证顺序/并行/流水线三种执行模式、任务依赖、回调机制。
 """
-import pytest
-from unittest.mock import MagicMock
-from codeagents.orchestration.orchestrator import (
-    Orchestrator, Task, Workflow,
-    ExecutionMode, TaskStatus,
-)
-from codeagents.orchestration.message_bus import MessageBus, SharedContext
+
 from codeagents.core.agent import BaseAgent
 from codeagents.core.schema import AgentContext, AgentStatus
+from codeagents.orchestration.orchestrator import ExecutionMode, Orchestrator, TaskStatus
 
 
 class MockAgent(BaseAgent):

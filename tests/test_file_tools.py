@@ -3,6 +3,7 @@
 通过工具注册表（真实调用路径 registry.execute）执行，全部基于临时目录，
 确定性、无网络依赖。
 """
+
 import os
 import tempfile
 
@@ -106,9 +107,7 @@ def test_grep_file_matches_and_case():
         out_none = REG.execute("grep_file", {"path": p, "pattern": "nonexistent_pattern"})
         assert "No matches" in out_none
 
-        out_case = REG.execute(
-            "grep_file", {"path": p, "pattern": "DEF FOO", "ignore_case": True}
-        )
+        out_case = REG.execute("grep_file", {"path": p, "pattern": "DEF FOO", "ignore_case": True})
         assert "Line 1" in out_case
 
 

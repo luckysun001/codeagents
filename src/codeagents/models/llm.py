@@ -1,8 +1,9 @@
 """LLM模型包装器"""
-from typing import Any, Dict, List, Optional
-from abc import ABC, abstractmethod
+
 import json
 import os
+from abc import ABC, abstractmethod
+from typing import Any, Dict, List, Optional
 
 
 class BaseLLM(ABC):
@@ -24,9 +25,7 @@ class BaseLLM(ABC):
         pass
 
     @abstractmethod
-    def chat_with_tools(
-        self, messages: List[Dict[str, Any]], tools: List[Dict[str, Any]], **kwargs
-    ) -> Dict[str, Any]:
+    def chat_with_tools(self, messages: List[Dict[str, Any]], tools: List[Dict[str, Any]], **kwargs) -> Dict[str, Any]:
         """带工具调用的聊天"""
         pass
 
@@ -54,9 +53,7 @@ class OpenAILLM(BaseLLM):
 
             self._client = OpenAI(api_key=api_key, base_url=base_url)
         except ImportError:
-            raise ImportError(
-                "openai package not installed. Install with: pip install openai"
-            )
+            raise ImportError("openai package not installed. Install with: pip install openai")
 
     def chat(self, messages: List[Dict[str, Any]], **kwargs) -> Dict[str, Any]:
         response = self._client.chat.completions.create(
@@ -70,9 +67,7 @@ class OpenAILLM(BaseLLM):
             "usage": response.usage.model_dump() if response.usage else None,
         }
 
-    def chat_with_tools(
-        self, messages: List[Dict[str, Any]], tools: List[Dict[str, Any]], **kwargs
-    ) -> Dict[str, Any]:
+    def chat_with_tools(self, messages: List[Dict[str, Any]], tools: List[Dict[str, Any]], **kwargs) -> Dict[str, Any]:
         response = self._client.chat.completions.create(
             model=self.model,
             messages=messages,
@@ -90,11 +85,13 @@ class OpenAILLM(BaseLLM):
                 except json.JSONDecodeError:
                     arguments = {}
 
-                tool_calls.append({
-                    "id": tc.id,
-                    "name": tc.function.name,
-                    "arguments": arguments,
-                })
+                tool_calls.append(
+                    {
+                        "id": tc.id,
+                        "name": tc.function.name,
+                        "arguments": arguments,
+                    }
+                )
 
         return {
             "content": message.content,
@@ -174,9 +171,7 @@ class AnthropicLLM(BaseLLM):
             api_key = self.api_key or os.getenv("ANTHROPIC_API_KEY")
             self._client = Anthropic(api_key=api_key)
         except ImportError:
-            raise ImportError(
-                "anthropic package not installed. Install with: pip install anthropic"
-            )
+            raise ImportError("anthropic package not installed. Install with: pip install anthropic")
 
     def chat(self, messages: List[Dict[str, Any]], **kwargs) -> Dict[str, Any]:
         # 提取system消息
@@ -204,18 +199,18 @@ class AnthropicLLM(BaseLLM):
             },
         }
 
-    def chat_with_tools(
-        self, messages: List[Dict[str, Any]], tools: List[Dict[str, Any]], **kwargs
-    ) -> Dict[str, Any]:
+    def chat_with_tools(self, messages: List[Dict[str, Any]], tools: List[Dict[str, Any]], **kwargs) -> Dict[str, Any]:
         # 转换工具格式
         anthropic_tools = []
         for t in tools:
             func = t["function"]
-            anthropic_tools.append({
-                "name": func["name"],
-                "description": func["description"],
-                "input_schema": func["parameters"],
-            })
+            anthropic_tools.append(
+                {
+                    "name": func["name"],
+                    "description": func["description"],
+                    "input_schema": func["parameters"],
+                }
+            )
 
         # 提取system消息
         system_prompt = ""
@@ -241,11 +236,13 @@ class AnthropicLLM(BaseLLM):
             if block.type == "text":
                 content_text += block.text
             elif block.type == "tool_use":
-                tool_calls.append({
-                    "id": block.id,
-                    "name": block.name,
-                    "arguments": block.input,
-                })
+                tool_calls.append(
+                    {
+                        "id": block.id,
+                        "name": block.name,
+                        "arguments": block.input,
+                    }
+                )
 
         return {
             "content": content_text,

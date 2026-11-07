@@ -2,14 +2,11 @@
 
 使用 FakeLLM 驱动，不依赖真实 API。
 """
+
 import pytest
 
 from codeagents.agents.llm_tool_agent import LLMToolAgent
-from codeagents.agents.specialized_agents import (
-    ArchitectAgent,
-    DebuggerAgent,
-    DocumenterAgent,
-)
+from codeagents.agents.specialized_agents import ArchitectAgent, DebuggerAgent, DocumenterAgent
 from codeagents.core.schema import AgentStatus, Role
 from codeagents.tools.registry import ToolRegistry, tool
 
@@ -75,16 +72,11 @@ class TestAgentDefinitions:
         assert agent.llm is not None
 
     def test_custom_system_prompt_overrides_default(self):
-        agent = DebuggerAgent(
-            agent_id="dbg-1", llm=FakeLLM(), system_prompt="只回答根因"
-        )
+        agent = DebuggerAgent(agent_id="dbg-1", llm=FakeLLM(), system_prompt="只回答根因")
         assert agent.system_prompt == "只回答根因"
 
     def test_prompts_are_role_specific(self):
-        prompts = {
-            cls.DEFAULT_SYSTEM_PROMPT
-            for cls in (ArchitectAgent, DebuggerAgent, DocumenterAgent)
-        }
+        prompts = {cls.DEFAULT_SYSTEM_PROMPT for cls in (ArchitectAgent, DebuggerAgent, DocumenterAgent)}
         assert len(prompts) == 3  # 三个角色的 prompt 互不相同
 
 
@@ -110,9 +102,7 @@ class TestAgentExecution:
             contents=["先看一下目录结构", "结论：问题在 parser.py 第 42 行"],
             tool_calls=[{"id": "call-1", "name": "fake_probe", "arguments": {"target": "src"}}],
         )
-        agent = DebuggerAgent(
-            agent_id="dbg-1", llm=llm, tool_registry=make_registry(), max_steps=3
-        )
+        agent = DebuggerAgent(agent_id="dbg-1", llm=llm, tool_registry=make_registry(), max_steps=3)
 
         ctx = agent.run("pytest 挂了，帮我定位")
 
@@ -130,15 +120,11 @@ class TestAgentExecution:
                 super().chat_with_tools(messages, tools, **kwargs)
                 return {
                     "content": "",
-                    "tool_calls": [
-                        {"id": "c", "name": "not_exist", "arguments": {}}
-                    ],
+                    "tool_calls": [{"id": "c", "name": "not_exist", "arguments": {}}],
                     "usage": None,
                 }
 
-        agent = DocumenterAgent(
-            agent_id="doc-1", llm=BrokenLLM(), tool_registry=make_registry(), max_steps=2
-        )
+        agent = DocumenterAgent(agent_id="doc-1", llm=BrokenLLM(), tool_registry=make_registry(), max_steps=2)
         ctx = agent.run("生成 README")
 
         tool_results = [m for m in ctx.messages if m.tool_result is not None]
@@ -151,9 +137,7 @@ class TestAgentExecution:
             contents=["继续"],
             tool_calls=[{"id": "c", "name": "fake_probe", "arguments": {}}],
         )
-        agent = DebuggerAgent(
-            agent_id="dbg-2", llm=llm, tool_registry=make_registry(), max_steps=2
-        )
+        agent = DebuggerAgent(agent_id="dbg-2", llm=llm, tool_registry=make_registry(), max_steps=2)
         ctx = agent.run("死循环测试")
         assert ctx.current_step <= 2
         assert ctx.status == AgentStatus.FINISHED

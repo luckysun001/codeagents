@@ -1,15 +1,8 @@
 """
 示例2: 多智能体协作 - 代码审查工作流
 """
-from codeagents import (
-    CodeAgent,
-    PlanningAgent,
-    ReviewAgent,
-    get_llm,
-    create_tool_registry,
-    Orchestrator,
-    ExecutionMode,
-)
+
+from codeagents import CodeAgent, ExecutionMode, Orchestrator, PlanningAgent, ReviewAgent, create_tool_registry, get_llm
 
 
 def main():

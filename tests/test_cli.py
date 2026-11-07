@@ -5,10 +5,11 @@
 get_llm/create_tool_registry）让其在无真实 LLM 与 API Key 下跑通；
 同时覆盖 缺 Key 退出、--version、info、help 等分支。
 """
+
 import sys
+from unittest.mock import patch
 
 import pytest
-from unittest.mock import patch
 
 import codeagents
 from codeagents import cli
@@ -68,11 +69,13 @@ def test_cli_run_missing_api_key(monkeypatch, capsys):
 def test_cli_run_with_fakes(monkeypatch, capsys):
     monkeypatch.setenv("OPENAI_API_KEY", "dummy-key")
     _set_argv(monkeypatch, ["run", "my prompt", "--agent", "code", "--model", "gpt-4o"])
-    with patch.object(codeagents, "CodeAgent", _FakeAgent), \
-         patch.object(codeagents, "PlanningAgent", _FakeAgent), \
-         patch.object(codeagents, "ReviewAgent", _FakeAgent), \
-         patch.object(codeagents, "get_llm", lambda *a, **k: object()), \
-         patch.object(codeagents, "create_tool_registry", lambda *a, **k: object()):
+    with (
+        patch.object(codeagents, "CodeAgent", _FakeAgent),
+        patch.object(codeagents, "PlanningAgent", _FakeAgent),
+        patch.object(codeagents, "ReviewAgent", _FakeAgent),
+        patch.object(codeagents, "get_llm", lambda *a, **k: object()),
+        patch.object(codeagents, "create_tool_registry", lambda *a, **k: object()),
+    ):
         cli.main()
     out = capsys.readouterr().out
     assert "my prompt" in out
@@ -83,8 +86,7 @@ def test_cli_run_with_fakes(monkeypatch, capsys):
 def test_cli_run_import_error(monkeypatch, capsys):
     monkeypatch.setenv("OPENAI_API_KEY", "dummy-key")
     _set_argv(monkeypatch, ["run", "x"])
-    with patch.object(codeagents, "get_llm", side_effect=ImportError("boom")), \
-         pytest.raises(SystemExit) as exc:
+    with patch.object(codeagents, "get_llm", side_effect=ImportError("boom")), pytest.raises(SystemExit) as exc:
         cli.main()
     assert exc.value.code == 1
     assert "导入错误" in capsys.readouterr().err
@@ -93,8 +95,7 @@ def test_cli_run_import_error(monkeypatch, capsys):
 def test_cli_run_generic_exception(monkeypatch, capsys):
     monkeypatch.setenv("OPENAI_API_KEY", "dummy-key")
     _set_argv(monkeypatch, ["run", "x"])
-    with patch.object(codeagents, "get_llm", side_effect=RuntimeError("boom")), \
-         pytest.raises(SystemExit) as exc:
+    with patch.object(codeagents, "get_llm", side_effect=RuntimeError("boom")), pytest.raises(SystemExit) as exc:
         cli.main()
     assert exc.value.code == 1
     assert "运行错误" in capsys.readouterr().err
@@ -110,10 +111,12 @@ def test_cli_run_planning_agent(monkeypatch, capsys):
             return _FakeContext()
 
     _set_argv(monkeypatch, ["run", "plan it", "--agent", "planning"])
-    with patch.object(codeagents, "CodeAgent", _FakePlanning), \
-         patch.object(codeagents, "PlanningAgent", _FakePlanning), \
-         patch.object(codeagents, "ReviewAgent", _FakePlanning), \
-         patch.object(codeagents, "get_llm", lambda *a, **k: object()), \
-         patch.object(codeagents, "create_tool_registry", lambda *a, **k: object()):
+    with (
+        patch.object(codeagents, "CodeAgent", _FakePlanning),
+        patch.object(codeagents, "PlanningAgent", _FakePlanning),
+        patch.object(codeagents, "ReviewAgent", _FakePlanning),
+        patch.object(codeagents, "get_llm", lambda *a, **k: object()),
+        patch.object(codeagents, "create_tool_registry", lambda *a, **k: object()),
+    ):
         cli.main()
     assert calls.get("prompt") == "plan it"

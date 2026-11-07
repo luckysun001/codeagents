@@ -5,6 +5,7 @@
 - run_pytest：在临时目录跑一个会通过的最小测试套件（需要 PATH 中有 python）
 - check_pep8 / check_type_hints：通过 mock subprocess.run 覆盖 通过 / 有告警 / 未安装 三条分支
 """
+
 import os
 import shutil
 import tempfile
@@ -24,9 +25,7 @@ def test_execute_python_stdout():
 
 
 def test_execute_python_stderr_and_return_code():
-    out = REG.execute(
-        "execute_python", {"code": "import sys; sys.stderr.write('boom'); sys.exit(3)"}
-    )
+    out = REG.execute("execute_python", {"code": "import sys; sys.stderr.write('boom'); sys.exit(3)"})
     assert "boom" in out
     assert "Return Code: 3" in out
 

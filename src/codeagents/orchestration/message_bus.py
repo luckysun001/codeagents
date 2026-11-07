@@ -1,13 +1,15 @@
 """消息总线：智能体之间的通信"""
-from typing import Any, Callable, Dict, List, Optional
+
+import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
-import uuid
 from enum import Enum
+from typing import Any, Callable, Dict, List, Optional
 
 
 class MessagePriority(int, Enum):
     """消息优先级"""
+
     LOW = 0
     NORMAL = 1
     HIGH = 2
@@ -17,6 +19,7 @@ class MessagePriority(int, Enum):
 @dataclass
 class BusMessage:
     """总线上的消息"""
+
     sender_id: str
     message_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     receiver_id: Optional[str] = None  # None = 广播

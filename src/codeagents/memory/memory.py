@@ -1,14 +1,16 @@
 """记忆系统"""
-from typing import Any, Dict, List, Optional
-from dataclasses import dataclass, field
-from datetime import datetime
+
 import json
 import os
+from dataclasses import dataclass, field
+from datetime import datetime
+from typing import Any, Dict, List, Optional
 
 
 @dataclass
 class Conversation:
     """对话记录"""
+
     conversation_id: str
     messages: List[Dict[str, Any]]
     metadata: Dict[str, Any] = field(default_factory=dict)
@@ -19,6 +21,7 @@ class Conversation:
 @dataclass
 class MemoryItem:
     """记忆条目"""
+
     key: str
     value: Any
     importance: float = 0.5  # 0.0 - 1.0

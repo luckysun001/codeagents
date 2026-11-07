@@ -2,6 +2,7 @@
 
 覆盖 create_tool_registry 工厂函数：默认包含全部工具、include 过滤。
 """
+
 from codeagents import create_tool_registry
 
 FILE_TOOLS = {
@@ -34,7 +35,7 @@ GIT_TOOLS = {
 def test_create_tool_registry_all():
     reg = create_tool_registry()
     names = {t.name for t in reg.list_tools()}
-    assert FILE_TOOLS | CODE_TOOLS | GIT_TOOLS <= names
+    assert names >= FILE_TOOLS | CODE_TOOLS | GIT_TOOLS
     # 6 + 5 + 8 = 19
     assert len(names) == 19
 

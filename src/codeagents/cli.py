@@ -14,7 +14,8 @@ def main():
         description="CodeAgents - 面向代码的轻量级多智能体框架",
     )
     parser.add_argument(
-        "-V", "--version",
+        "-V",
+        "--version",
         action="version",
         version=f"codeagents {__version__}",
     )
@@ -32,20 +33,23 @@ def main():
         help="Agent 执行提示词",
     )
     run_parser.add_argument(
-        "--agent", "-a",
+        "--agent",
+        "-a",
         type=str,
         default="code",
         choices=["code", "planning", "review"],
         help="Agent 类型 (默认: code)",
     )
     run_parser.add_argument(
-        "--model", "-m",
+        "--model",
+        "-m",
         type=str,
         default="gpt-4o",
         help="LLM 模型名称 (默认: gpt-4o)",
     )
     run_parser.add_argument(
-        "--provider", "-p",
+        "--provider",
+        "-p",
         type=str,
         default="openai",
         choices=["openai", "anthropic"],
@@ -103,13 +107,7 @@ def _run_agent(args):
         sys.exit(1)
 
     try:
-        from . import (
-            CodeAgent,
-            PlanningAgent,
-            ReviewAgent,
-            get_llm,
-            create_tool_registry,
-        )
+        from . import CodeAgent, PlanningAgent, ReviewAgent, create_tool_registry, get_llm
 
         # 初始化 LLM
         llm = get_llm(provider=args.provider, model=args.model)

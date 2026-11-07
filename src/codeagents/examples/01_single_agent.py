@@ -1,7 +1,8 @@
 """
 示例1: 单个代码智能体的基本使用
 """
-from codeagents import CodeAgent, get_llm, create_tool_registry
+
+from codeagents import CodeAgent, create_tool_registry, get_llm
 
 # 确保设置了API密钥
 # os.environ["OPENAI_API_KEY"] = "your-api-key"

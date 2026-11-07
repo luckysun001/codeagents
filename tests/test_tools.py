@@ -1,10 +1,13 @@
 """测试工具系统"""
+
 import pytest
-from codeagents.tools.registry import Tool, ToolRegistry, tool
+
+from codeagents.tools.registry import ToolRegistry, tool
 
 
 def test_tool_decorator():
     """测试工具装饰器"""
+
     @tool(name="test_tool", description="Test tool", category="test")
     def test_func(param1: str, param2: int = 10) -> str:
         return f"{param1}: {param2}"
