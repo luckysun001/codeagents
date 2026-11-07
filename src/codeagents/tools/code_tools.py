@@ -1,4 +1,5 @@
 """代码执行工具"""
+import shlex
 import subprocess
 import sys
 from ..tools.registry import tool, ToolRegistry
@@ -29,9 +30,17 @@ def execute_python(code: str, timeout: int = 30) -> str:
         return f"Error executing code: {e}"
 
 
-@tool(name="execute_command", description="执行Shell命令", category="code")
+@tool(
+    name="execute_command",
+    description="执行Shell命令（注意：以 shell=True 运行任意命令，仅限可信/本地环境使用）",
+    category="code",
+)
 def execute_command(command: str, cwd: str = ".", timeout: int = 60) -> str:
-    """执行Shell命令"""
+    """执行Shell命令。
+
+    安全提示：本工具通过 ``shell=True`` 运行调用方提供的任意命令，存在命令注入风险，
+    仅应在可信、隔离的本地环境中由 Agent 自主使用，切勿将其暴露给不可信输入或公网服务。
+    """
     try:
         result = subprocess.run(
             command,
@@ -60,10 +69,10 @@ def execute_command(command: str, cwd: str = ".", timeout: int = 60) -> str:
 def run_pytest(path: str = "tests", args: str = "-v", timeout: int = 120) -> str:
     """运行pytest测试"""
     try:
-        cmd = f"python -m pytest {path} {args}"
+        cmd = ["python", "-m", "pytest", path, *shlex.split(args)]
         result = subprocess.run(
             cmd,
-            shell=True,
+            shell=False,
             capture_output=True,
             text=True,
             timeout=timeout,
